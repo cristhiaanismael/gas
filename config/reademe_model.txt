@@ -1,0 +1,47 @@
+<?php
+
+/**
+ * 
+ */
+class {name} extends padreM
+{
+	
+		public function __construct()
+	{
+		parent::__construct();
+
+	}
+
+	public function selec(){
+		$query="SELECT * FROM {name};";
+		$datos=$this->con->consultaRetorno($query);
+		return $datos;
+	}
+	public function update($columna, $value , $where){
+		$query="UPDATE  menus SET  $columna='$value' where id_columna='$where';";
+		$datos=$this->con->consultaRetorno($query);
+		return $datos;
+
+	}
+	public function auntentifica($usu, $psw){
+		$query="SELECT * FROM {name} where {name}='$usu' and pasword= BINARY '$psw';";
+		$datos=$this->con->consultaRetorno($query);
+		return $datos;
+
+	}
+	public function insert($name, $app, $usu, $psw, $rol ){
+		$query="INSERT INTO {name} (nombre, apellido, usuario, pasword, rol) values('$name', '$app', '$usu', '$psw', '$rol');";
+		$datos=$this->con->consultainsert($query);
+		return $datos;
+	} 
+	public function verifica($parametros){
+		$query="SELECT * FROM {name} WHERE {columna} like '$parametros';";
+		$datos=$this->con->consultaRetorno($query);
+		return $datos;
+
+	} 
+	
+
+}
+
+?>

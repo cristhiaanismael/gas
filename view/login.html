@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {font-family: Arial, Helvetica, sans-serif;}
+
+/* Full-width input fields */
+input[type=text], input[type=password] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+select {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+/* Set a style for all buttons */
+button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+/* Extra styles for the cancel button */
+.cancelbtn {
+  width: auto;
+  padding: 10px 18px;
+  background-color: #f44336;
+}
+
+/* Center the image and position the close button */
+.imgcontainer {
+  text-align: center;
+  margin: 24px 0 12px 0;
+  position: relative;
+}
+
+img.avatar {
+  width: 40%;
+  border-radius: 50%;
+}
+
+.container {
+  padding: 16px;
+}
+
+span.psw {
+  float: right;
+  padding-top: 16px;
+}
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  padding-top: 60px;
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: #fefefe;
+  margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+  border: 1px solid #888;
+  width: 80%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button (x) */
+.close {
+  position: absolute;
+  right: 25px;
+  top: 0;
+  color: #000;
+  font-size: 35px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: red;
+  cursor: pointer;
+}
+
+/* Add Zoom Animation */
+.animate {
+  -webkit-animation: animatezoom 0.6s;
+  animation: animatezoom 0.6s
+}
+
+@-webkit-keyframes animatezoom {
+  from {-webkit-transform: scale(0)} 
+  to {-webkit-transform: scale(1)}
+}
+  
+@keyframes animatezoom {
+  from {transform: scale(0)} 
+  to {transform: scale(1)}
+}
+
+/* Change styles for span and cancel button on extra small screens */
+@media screen and (max-width: 300px) {
+  span.psw {
+     display: block;
+     float: none;
+  }
+  .cancelbtn {
+     width: 100%;
+  }
+}
+</style>
+</head>
+<body style=" ">
+
+<center>
+   <h2>Marvifet Gas</h2>
+</center>
+<div style="width: 100%; height: 100%; background-image: url(img/logo_login.jpg);  background-repeat:no-repeat; margin-left: 10rem"> <br><br><br><br><br><br><br><br><br><br><br><br><br><br> <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br> <br>
+<div id="id01" class="modal" data-backdrop="static">
+  
+  <form class="modal-content animate" action="#" id="formlogin">
+    <div class="imgcontainer">
+      <!-- <img src="img_avatar2.png" alt="Avatar" class="avatar">-->
+    </div>
+
+    <div class="container">
+      <label for="edificio"><b>Edicio</b></label>
+      <select id="edificio" class="edificios" placeholder="edificio">
+      </select>
+
+      <label for="psw"><b>Convenio</b></label>
+      <input type="text"  name="convenio" id="convenio" required>
+        
+      <button type="submit">Login</button>
+      <label>
+        <input type="checkbox" checked="checked" name="remember"> Remember me
+      </label>
+    </div>
+
+    <div class="container" style="background-color:#f1f1f1">
+      <span class="psw">Forgot <a href="#">password?</a></span>
+    </div>
+  </form>
+</div>
+<script src="assets/js/core/jquery.min.js"></script>
+<script src="assets/js/core/popper.min.js"></script>
+<script src="assets/js/core/bootstrap.min.js"></script>
+<script type="text/javascript" src="jsback/funciones_globales.js"></script>
+<script>
+    $(document).ready(function(){
+       $('#id01').modal('show');
+       $('#id01').modal({backdrop: 'static', keyboard: false})
+       get_edificios();
+    });
+    $('#formlogin').submit(function(event){
+       event.preventDefault();
+       let url_amrada1=url+'autentifica_cliente';
+       let parametros1={
+          "edificio": $('#edificio').val(),
+          "convenio": $('#convenio').val()
+       };
+     	$.ajax({
+			url: url_amrada1,
+            type: "GET",
+            data: parametros1,
+		   beforeSend: function () {
+				$('#carga').html("<img width='10%' src='images/carga.gif'>");
+			},
+			success:  function (response) {
+                if(testeo=='TRUE'){console.log(response)}
+                let data=JSON.parse(response);
+                if(data.status>0){
+                	
+                    localStorage.setItem('id_cliente', data.status);
+                    //console.log(localStorage.getItem('id_cliente'));
+                    setTimeout(()=>{
+                        location.href="index_clientes.php?tk";
+                    },500)
+                }
+                else if(data.admin>0){
+                  console.log("entra"); 
+               
+                  localStorage.setItem('id_user', data.admin);
+                  setTimeout(()=>{
+                        location.href="index.php?usr";
+                    },500)
+
+                }else{
+                	
+                  		alert("Datos incorrectos por favor verifique");
+                  	
+                }
+                
+			}
+	});
+
+    });
+
+
+    get_edificios=()=>{
+		var url_amrada=url+'edificios';
+		$.ajax({
+	            url: url_amrada,
+			    type: "GET",
+	           beforeSend: function () {
+	                $('#carga').html("<img width='10%' src='images/carga.gif'>");
+	            },
+	            success:  function (response) {
+	            	if(testeo=='TRUE'){console.log(response)}
+                        let edificios=JSON.parse(response);
+                        $('.edificios').html('');
+		                 $('.edificios').append(`<option disabled="" selected="selected" >Elige Edificio</option>`);		            	
+		                $.each(edificios[0].data, function(i, item){
+			              $('.edificios').append(`<option value="${item.id_edificio}">${item.num_edificio} </option>`);		            	
+                   });
+                   $('.edificios').append(`<option value="0">Adm</option>`);		            	
+
+	        	}
+	     });
+}
+
+</script>
+</div>
+</body>
+</html>
